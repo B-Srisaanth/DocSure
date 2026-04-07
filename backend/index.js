@@ -17,7 +17,12 @@ const app = express();
 // --- CORS must come FIRST so preflight OPTIONS requests get headers ---
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+    // Allow requests from frontend and local development
+    const allowedOrigins = [
+      process.env.FRONTEND_URL || 'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:5173'
+    ];
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -74,22 +79,22 @@ app.use('/api/admin', adminRoutes);
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error('❌ Error:', err);
-  
+
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
-  
+
   // Mongoose validation error
   if (err.name === 'ValidationError') {
     statusCode = 400;
     message = Object.values(err.errors).map(e => e.message).join(', ');
   }
-  
+
   // Mongoose duplicate key error
   if (err.code === 11000) {
     statusCode = 400;
     message = `${Object.keys(err.keyValue)[0]} already exists`;
   }
-  
+
   res.status(statusCode).json({
     success: false,
     message: message,

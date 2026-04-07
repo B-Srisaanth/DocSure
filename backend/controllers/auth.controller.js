@@ -10,24 +10,24 @@ const signToken = (id) => {
 const registerUser = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
-    
+
     // Validate required fields
     if (!name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Please provide name, email, and password' });
     }
-    
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'User already exists' });
     }
-    
+
     // Create new user
     const user = await User.create({ name, email, password, role });
-    
+
     // Generate token
     const token = signToken(user._id);
-    
+
     res.status(201).json({
       success: true,
       message: 'Registration successful',
@@ -44,36 +44,36 @@ const registerUser = async (req, res, next) => {
     next(err);
   }
 };
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+id: user._id,
+  name: user.name,
+    email: user.email,
+      role: user.role,
       },
     });
   } catch (err) {
-    next(err);
-  }
+  next(err);
+}
 };
 
 // Login Controller
 const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    
+
     // 1) Check if email & password are provided
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'Please provide email and password' });
     }
-    
+
     // 2) Find user & check if password is correct
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ success: false, message: 'Incorrect email or password' });
     }
-    
+
     // 3) Everything OK, generate & send token
     const token = signToken(user._id);
-    
+
     res.status(200).json({
       success: true,
       token,
