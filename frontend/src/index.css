@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: #E2E8F0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 50%, #020617 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glassmorphism utility classes */
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.glass-card {
+  @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-2xl;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-input {
+  @apply bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 outline-none transition-all duration-300;
+}
+
+.glass-input:focus {
+  @apply ring-1 ring-primary-glow border-primary-glow/50 bg-white/[0.08];
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+}
+
+/* AI Style Glow Button */
+.btn-primary {
+  @apply relative overflow-hidden bg-primary px-6 py-2.5 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-glow {
+  @apply relative overflow-hidden bg-gradient-to-r from-primary to-accent-cyan px-6 py-2.5 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] active:scale-95;
+}
+
+.glass-sidebar {
+  @apply bg-background-end/40 backdrop-blur-2xl border-r border-white/5;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Keyframes already in tailwind config, adding smooth entry for sections */
+.fade-up {
+  animation: slide-up 0.6s ease-out forwards;
+}
+
+/* Floating labels effect helper */
+.floating-label-group {
+  @apply relative mb-6;
+}
+
+.floating-label {
+  @apply absolute left-4 top-3.5 text-slate-400 transition-all duration-300 pointer-events-none;
+}
+
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  @apply -top-2.5 left-3 text-xs bg-slate-900 px-2 text-primary-glow border border-primary-glow/30 rounded-md;
+}
+
